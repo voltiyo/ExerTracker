@@ -52,7 +52,6 @@ app.post("/api/users/:_id/exercises", (req,res) => {
         let data;
         let dateinput;
         let datein = req.body.date
-        console.log(datein)
         if (req.body.date === "" || req.body.date === undefined){
             dateinput = new Date().toDateString()
         } else{
@@ -92,7 +91,7 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
                 username = exercices[i].username
                 let date = new Date(exercices[i].date).getTime()
                 let data;
-                if (from <= date <= to){
+                if (from <= date && date <= to){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
@@ -160,7 +159,6 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < limit; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
                 let data;
                 data = {
                     description: exercices[i].description,
