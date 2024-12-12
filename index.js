@@ -54,7 +54,11 @@ app.post("/api/users/:_id/exercises", (req,res) => {
         if (req.body.date === ""){
             dateinput = new Date().toDateString()
         } else{
-            dateinput = new Date(req.body.date.replace(" ", "-").replace(" ", "-")).toDateString()
+            if (" " in req.body.date){
+                dateinput = new Date(req.body.date.replace(" ", "-").replace(" ", "-")).toDateString()
+            } else{
+                dateinput = new Date(req.body.date)
+            }
         }
         data = {username: username, description: req.body.description, duration: parseInt(req.body.duration), date: dateinput, _id : id}
     
