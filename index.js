@@ -69,160 +69,50 @@ app.post("/api/users/:_id/exercises", (req,res) => {
         res.send({"error" : "user not found !"})
     }
 })
-app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
-    let id = req.params._id;
-    let limit;
-    let from;
-    let to;
-    if (req.query.from !== undefined){
-        from = new Date(req.query.from).getTime();
-    } 
-    if (req.query.to !== undefined){
-        to = new Date(req.query.to).getTime();
+app.get("/api/users/:_id/logs", (req, res) => {
+    const id = req.params._id;
+    const { from, to, limit } = req.query;
+
+    const fromDate = from ? new Date(from).getTime() : null;
+    const toDate = to ? new Date(to).getTime() : null;
+    const limitNum = limit ? parseInt(limit) : null;
+
+    // Assuming `exercices` is an array of exercise objects.
+    const userLogs = exercices.filter(exercise => exercise._id === id);
+
+    if (userLogs.length === 0) {
+        return res.status(404).send({ error: "User not found" });
     }
-    if (req.query.limit !== undefined){
-        limit = parseInt(req.query.limit);
+
+    // Apply filters
+    let filteredLogs = userLogs.filter(exercise => {
+        const exerciseDate = new Date(exercise.date).getTime();
+        if (fromDate && exerciseDate < fromDate) return false;
+        if (toDate && exerciseDate > toDate) return false;
+        return true;
+    });
+
+    // Apply limit
+    if (limitNum) {
+        filteredLogs = filteredLogs.slice(0, limitNum);
     }
-    let log = []
-    let username;
-    if (limit !== undefined && from !== undefined && to !== undefined){
-        for (let i = 0; i < limit; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
-                let data;
-                if (from <= date && date <= to){
-                    data = {
-                        description: exercices[i].description,
-                        duration: exercices[i].duration,
-                        date: exercices[i].date,
-                    }
-                    log.push(data)
-                }
-            }
-        }
-    
-    }
-    if (from !== undefined && to !== undefined){
-        for (let i = 0; i < exercices.length; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
-                let data;
-                if (from <= date && date <= to){
-                    data = {
-                        description: exercices[i].description,
-                        duration: exercices[i].duration,
-                        date: exercices[i].date,
-                    }
-                    log.push(data)
-                }
-            }
-        }
-    
-    }
-    else if (limit !== undefined && from !== undefined){
-        for (let i = 0; i < limit; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
-                let data;
-                if (from <= date){
-                    data = {
-                        description: exercices[i].description,
-                        duration: exercices[i].duration,
-                        date: exercices[i].date,
-                    }
-                    log.push(data)
-                }
-            }
-        }
-    }
-    else if (limit !== undefined && to !== undefined){
-        for (let i = 0; i < limit; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
-                let data;
-                if (date <= to){
-                    data = {
-                        description: exercices[i].description,
-                        duration: exercices[i].duration,
-                        date: exercices[i].date,
-                    }
-                    log.push(data)
-                }
-            }
-        }
-    }
-    else if (limit !== undefined){
-        for (let i = 0; i < limit; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let data;
-                data = {
-                    description: exercices[i].description,
-                    duration: exercices[i].duration,
-                    date: exercices[i].date,
-                }
-                log.push(data)
-                
-            }
-        }
-    }
-    else if (from !== undefined){
-        for (let i = 0; i < exercices.length; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
-                let data;
-                if (from <= date){
-                    data = {
-                        description: exercices[i].description,
-                        duration: exercices[i].duration,
-                        date: exercices[i].date,
-                    }
-                    log.push(data)
-                }
-            }
-        }
-    }
-    else if (to !== undefined){
-        for (let i = 0; i < exercices.length; i++){
-            if (exercices[i]._id === id){
-                username = exercices[i].username
-                let date = new Date(exercices[i].date).getTime()
-                let data;
-                if (date <= to){
-                    data = {
-                        description: exercices[i].description,
-                        duration: exercices[i].duration,
-                        date: exercices[i].date   ,
-                    }
-                    log.push(data)
-                }
-            }
-        }
-    }
-    else{
-        exercices.forEach(exercice => {
-            if (exercice._id === id){
-                username = exercice.username
-                let data = {
-                    description: exercice.description,
-                    duration: exercice.duration,
-                    date: exercice.date
-                }
-                log.push(data)
-            }
-        })
-        
-    }
-    if (username !== undefined){
-        res.send({username: username,count:log.length, _id: id, log: log})
-    } else{
-        res.send({"error": "user not found"})
-    }
-})
+
+    // Format the response
+    const responseLogs = filteredLogs.map(log => ({
+        description: log.description,
+        duration: log.duration,
+        date: log.date,
+    }));
+
+    const username = userLogs[0].username;
+
+    res.send({
+        username,
+        count: responseLogs.length,
+        _id: id,
+        log: responseLogs,
+    });
+});
+
 
 app.listen(3000)
