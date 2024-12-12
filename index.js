@@ -40,8 +40,8 @@ app.get("/api/users", (req, res) => {
 
 let exercices = [] 
 
-app.post("/api/users/:id/exercices", (req,res) => {
-    let id = req.params.id;
+app.post("/api/users/:_id/exercices", (req,res) => {
+    let id = req.params._id;
     let username
     users.forEach(user => {
         if (user._id === id){
@@ -64,8 +64,8 @@ app.post("/api/users/:id/exercices", (req,res) => {
         res.send({"error" : "user not found !"})
     }
 })
-app.get("/api/users/:id/logs/:limit?/:from?/:to?", (req,res) => {
-    let id = req.params.id;
+app.get("/api/users/_:id/logs/:limit?/:from?/:to?", (req,res) => {
+    let id = req.params._id;
     let limit = req.query.limit;
     let from
     let to
