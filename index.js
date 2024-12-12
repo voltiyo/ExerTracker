@@ -52,6 +52,7 @@ app.post("/api/users/:_id/exercises", (req,res) => {
         let data;
         let dateinput;
         let datein = req.body.date
+        console.log(datein)
         if (req.body.date === ""){
             dateinput = new Date().toDateString()
         } else{
