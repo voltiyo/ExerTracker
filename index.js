@@ -76,10 +76,10 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
     let from;
     let to;
     if (req.query.from !== undefined){
-        from = new Date(req.query.from);
+        from = new Date(req.query.from).getTime();
     } 
     if (req.query.to !== undefined){
-        to = new Date(req.query.to);
+        to = new Date(req.query.to).getTime();
     }
     if (req.query.limit !== undefined){
         limit = parseInt(req.query.limit);
@@ -90,13 +90,13 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < limit; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 if (from <= date <= to){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
-                        date: date.toDateString(),
+                        date: exercices[i].date,
                     }
                     log.push(data)
                 }
@@ -108,13 +108,13 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < exercices.length; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 if (from <= date && date <= to){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
-                        date: date.toDateString(),
+                        date: exercices[i].date,
                     }
                     log.push(data)
                 }
@@ -126,13 +126,13 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < limit; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 if (from <= date){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
-                        date: date.toDateString(),
+                        date: exercices[i].date,
                     }
                     log.push(data)
                 }
@@ -143,13 +143,13 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < limit; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 if (date <= to){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
-                        date: date.toDateString(),
+                        date: exercices[i].date,
                     }
                     log.push(data)
                 }
@@ -160,12 +160,12 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < limit; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 data = {
                     description: exercices[i].description,
                     duration: exercices[i].duration,
-                    date: date.toDateString(),
+                    date: exercices[i].date,
                 }
                 log.push(data)
                 
@@ -176,13 +176,13 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < exercices.length; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 if (from <= date){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
-                        date: date.toDateString(),
+                        date: exercices[i].date,
                     }
                     log.push(data)
                 }
@@ -193,13 +193,13 @@ app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
         for (let i = 0; i < exercices.length; i++){
             if (exercices[i]._id === id){
                 username = exercices[i].username
-                let date = new Date(exercices[i].date)
+                let date = new Date(exercices[i].date).getTime()
                 let data;
                 if (date <= to){
                     data = {
                         description: exercices[i].description,
                         duration: exercices[i].duration,
-                        date: date.toDateString()   ,
+                        date: exercices[i].date   ,
                     }
                     log.push(data)
                 }
