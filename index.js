@@ -51,14 +51,15 @@ app.post("/api/users/:_id/exercises", (req,res) => {
     if (username !== undefined){
         let data;
         let dateinput;
+        let datein = req.body.date
         if (req.body.date === ""){
             dateinput = new Date().toDateString()
         } else{
-            if (req.body.date.contains(" ")){
-                dateinput = new Date(req.body.date.replace(" ", "-").replace(" ", "-")).toDateString()
-            } else{
-                dateinput = new Date(req.body.date)
+            while (datein.includes(" ")){
+                datein = datein.replace(" ", "-")
             }
+            dateinput = new Date(datein).toDateString()
+            
         }
         data = {username: username, description: req.body.description, duration: parseInt(req.body.duration), date: dateinput, _id : id}
     
