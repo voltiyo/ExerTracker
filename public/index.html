@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/api/users" method="post">
+        <input type="text" placeholder="username" name="username">
+        <input type="submit" value="submit">
+    </form>
+    <form method="post" id="exerform">
+        <input type="text" name="id" placeholder="id" id="id" required>
+        <input type="text" name="description" placeholder="description" required>
+        <input type="text" name="duration" placeholder="duration" required>  
+        <input type="text" name="date" placeholder="date">
+        <input type="submit" value="submit">
+    </form>
+    <script>
+        const form = document.querySelector("#exerform")
+        form.addEventListener("submit", () => {
+            let id = document.getElementById("id").value;
+            form.action = `/api/users/${id}/exercices`
+        })
+    </script>
+</body>
+</html>
