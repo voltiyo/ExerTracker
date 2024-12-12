@@ -70,16 +70,19 @@ app.post("/api/users/:_id/exercises", (req,res) => {
         res.send({"error" : "user not found !"})
     }
 })
-app.get("/api/users/:_id/logs/:limit?/:from?/:to?", (req,res) => {
+app.get("/api/users/:_id/logs/:from?/:to?/:limit?", (req,res) => {
     let id = req.params._id;
-    let limit = req.query.limit;
-    let from
-    let to
+    let limit;
+    let from;
+    let to;
     if (req.query.from !== undefined){
         from = new Date(req.query.from);
     } 
     if (req.query.to !== undefined){
         to = new Date(req.query.to);
+    }
+    if (req.query.limit !== undefined){
+        limit = parseInt(req.query.limit);
     }
     let log = []
     let username;
